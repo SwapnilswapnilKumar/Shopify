@@ -1,9 +1,9 @@
-import React from 'react'
-import Admin from './Pages/Admin/Admin'
-import Navbar from './Components/Navbar/Navbar'
+import React from 'react';
+import Navbar from './Components/Navbar/Navbar';
+import Admin from './Pages/Admin/Admin';
 
-const App = () => {
-  return (
+const App = ()=>{
+  return(
     <div>
       <Navbar/>
       <Admin/>
@@ -11,4 +11,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
