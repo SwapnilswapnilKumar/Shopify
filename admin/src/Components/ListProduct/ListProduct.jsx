@@ -5,7 +5,7 @@ const ListProduct = ()=>{
     const [allproducts, setAllProducts] = useState([]);
 
     const fetchInfo = ()=>{
-        fetch('https://shopify-f5cu.onrender.com/allproducts')
+        fetch('https://shopify-8ns5.onrender.com/allproducts')
         .then((res)=>res.json())
         .then((data)=>setAllProducts(data))
     }
@@ -15,7 +15,7 @@ const ListProduct = ()=>{
     },[]);
 
     const removeProduct = async (id)=>{
-        await fetch('https://shopify-f5cu.onrender.com/removeproduct',{
+        await fetch('https://shopify-8ns5.onrender.com/removeproduct',{
             method:"POST",
             headers:{
                 Accept: 'application/json',

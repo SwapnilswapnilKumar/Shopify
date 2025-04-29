@@ -25,7 +25,7 @@ const AddProduct = ()=>{
         let formData = new FormData();
         formData.append('product',image);
 
-        await fetch('https://shopify-1-bwde.onrender.com/upload',{
+        await fetch('https://shopify-8ns5.onrender.com/upload',{
             method:"POST",
             headers:{
                 Accept:'application/json',
@@ -36,7 +36,7 @@ const AddProduct = ()=>{
 
         if(dataObj.success){
             product.image = dataObj.image_url;
-            await fetch('https://shopify-1-bwde.onrender.com/addProduct',{
+            await fetch('https://shopify-8ns5.onrender.com/addProduct',{
                 method:"POST",
                 headers:{
                     Accept:'application/json',
