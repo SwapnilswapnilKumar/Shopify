@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "proxy": "https://shopify-8ns5.onrender.com",
   "dependencies": {
     "express": "^5.1.0",
     "mongoose": "^8.14.0",

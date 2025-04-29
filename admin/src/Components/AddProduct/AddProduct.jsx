@@ -79,11 +79,11 @@ const AddProduct = ()=>{
             <div className='addproduct-price'>
             <div className='addproduct-itemfield'>
                 <p>Price</p>
-                <input type="number" name="old_price" placeholer="Type here" value={productDetails.old_price} onChange={changeHandler} />
+                <input type="number" name="old_price" placeholder="Type here" value={productDetails.old_price} onChange={changeHandler} />
             </div>
             <div className='addproduct-itemfield'>
                 <p>Offer Price</p>
-                <input type="nuymber" name="new_price" placeholder='Type here' value={productDetails.new_price} onChange={changeHandler} />
+                <input type="number" name="new_price" placeholder='Type here' value={productDetails.new_price} onChange={changeHandler} />
             </div>
 
             </div>
@@ -97,7 +97,7 @@ const AddProduct = ()=>{
                 </select>
             </div>
             <div className='addproduct-itemfield'>
-                <p>Poduct image</p>
+                <p>Product image</p>
                 <label htmlFor="file-input">
                     <img className="addproduct-thumbnail-img"  src={ !image ? upload_area : URL.createObjectURL(image)} alt="" />
                 </label>
