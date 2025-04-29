@@ -27,7 +27,6 @@ const cloudName = process.env.CLOUD_NAME;
 const cloudApiKey = process.env.CLOUD_API_KEY;
 const apiSecret = process.env.API_SECRET;
 
-console.log(userName,password,cloudName);
 
 //db connection
 const uri = `mongodb+srv://${userName}:${password}@cluster0.xk1vxsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
