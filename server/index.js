@@ -6,7 +6,9 @@ const path = require('path');
 const multer = require('multer');
 
 const cloudinary = require('cloudinary').v2;
-const multerStorageCloudinary = require('multer-storage-cloudinary').StorageEngine;
+// const multerStorageCloudinary = require('multer-storage-cloudinary').StorageEngine;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
 
 const cors = require('cors');
 const User = require('./config/UserModel');
@@ -42,13 +44,15 @@ cloudinary.config({
 });
 
 // Multer storage setup for Cloudinary
-const storage = new multerStorageCloudinary({
+const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    folder: 'shopify/images', // Folder name in Cloudinary
-    allowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
-    transformation: [{ width: 500, height: 500, crop: 'limit' }], // Optional transformations
-});
-
+    params: {
+      folder: 'shopify_products', // optional folder name on Cloudinary
+      allowed_formats: ['jpg', 'png', 'jpeg'],
+      public_id: (req, file) => `${Date.now()}_${file.originalname.split('.')[0]}`,
+    },
+  });
+  
 
 // /creating upload end point for images
 const upload = multer({storage:storage});
