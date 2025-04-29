@@ -30,7 +30,13 @@ const storage = multer.diskStorage({
 const upload = multer({storage:storage});
 
 app.use('/images',express.static(uploadDir));
-
+app.post('/upload',upload.single('product'),(req,res)=>{
+    
+    res.json({
+        success:1,
+        image_url:`https://shopify-1-bwde.onrender.com/images/${req.file.filename}`
+    })
+})
 
 
 app.post('/addProduct',async (req,res)=>{
