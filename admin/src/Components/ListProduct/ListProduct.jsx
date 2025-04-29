@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from "react";
 import cross_icon from '../Assets/cross_icon.png';
+import './ListProduct.css'
 
 const ListProduct = ()=>{
     const [allproducts, setAllProducts] = useState([]);
@@ -34,16 +35,16 @@ const ListProduct = ()=>{
 
             </div>
 
-            <div className="listprodict-allproducts">
+            <div className="listproduct-allproducts">
                 <hr />
                 {allproducts.map((item,index) => (
                     <div key={index}>
                         <div className="listproduct-format-main listproduct-format">
                             <img className="listproduct-product-icon" src={`${item.image}`} alt="" />
-                            <p className="cartitems-product-title" >{e.name}</p>
-                            <p>{e.old_price}</p>
-                            <p>{e.new_price}</p>
-                            <p>{e.category}</p>
+                            <p className="cartitems-product-title" >{item.name}</p>
+                            <p>{item.old_price}</p>
+                            <p>{item.new_price}</p>
+                            <p>{item.category}</p>
                             <img className="listproduct-remove-icon" onClick={()=>{removeProduct(item.id)}} src={cross_icon} alt="cross_icon" />
                         </div>
                     </div>

@@ -1,7 +1,10 @@
+require('dotenv').config();
 const express = require('express');
+
 const port = 4000;
 const app = express();
 const mongoose = require('mongoose');
+
 const path = require('path');
 const multer = require('multer');
 
@@ -14,12 +17,22 @@ const cors = require('cors');
 const User = require('./config/UserModel');
 const Product = require('./config/ProductModel');
 
+
 app.use(express.json());
 app.use(cors());
 
+const userName = process.env.USER_NAME;
+const password = process.env.PASSWORD;
+const cloudName = process.env.CLOUD_NAME;
+const cloudApiKey = process.env.CLOUD_API_KEY;
+const apiSecret = process.env.API_SECRET;
+
+console.log(userName,password,cloudName);
 
 //db connection
-mongoose.connect('mongodb+srv://test_skt:ft53y4zPTeIRNydT@cluster0.xk1vxsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',{ useNewUrlParser: true, useUnifiedTopology: true })
+const uri = `mongodb+srv://${userName}:${password}@cluster0.xk1vxsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+mongoose.connect(uri,{ useNewUrlParser: true, useUnifiedTopology: true })
 
 
 // image storage
@@ -38,9 +51,9 @@ const uploadDir = path.join(__dirname,'upload','images');
 // });
 
 cloudinary.config({
-    cloud_name: "dp9sg9tgq",
-    api_key: "389315996691944",
-    api_secret:"y2JiAksF3iJV8TiqgdGdouU-hsY"
+    cloud_name: cloudName,
+    api_key: cloudApiKey,
+    api_secret:apiSecret,
 });
 
 // Multer storage setup for Cloudinary
@@ -55,7 +68,7 @@ const storage = new CloudinaryStorage({
   
 
 // /creating upload end point for images
-const upload = multer({storage:storage});
+const upload = multer({storage:storage});   
 
 // app.use('/images',express.static(uploadDir));
 
@@ -63,6 +76,17 @@ const upload = multer({storage:storage});
 app.post('/upload', upload.single('product'), async (req, res) => {
     try {
         // File uploaded to Cloudinary
+        console.log("Uploaded file:", req.file); // Add this log!
+
+        if (!req.file || !req.file.path) {
+            return res.status(400).json({
+                success: false,
+                message: 'No file uploaded or Cloudinary failed to return path.',
+            });
+        }
+
+
+
         const imageUrl = req.file.path;; // Cloudinary URL
 
         // Respond with the image URL
