@@ -29,10 +29,45 @@ const storage = multer.diskStorage({
 // /creating upload end point for images
 const upload = multer({storage:storage});
 
-app.use('/images',express.static(uploadDir))
+app.use('/images',express.static(uploadDir));
 
 
 
+app.post('/addProduct',async (req,res)=>{
+    let products = await Product.find({});
+    let id=1;
+    if(product.length > 0){
+        let lastProduct = products.slice(-1)[0];
+        id = lastProduct.id + 1;
+    }
+    const product = new Product(({
+        id:id,
+        name:req.body.name,
+        image:req.body.image,
+        category:req.body.category,
+        new_price:req.body.new_price,
+        old_price:req.body.old_price
+    }));
+    console.log(product);
+    await product.save();
+
+    res.json({
+        success:true,
+        name:req.body.name,
+    });
+})
+
+// creating api for deleting products:
+
+app.post('/removeproduct', async (req,res)=>{
+    await Product.findOneAndDelete({id:req.body.id});
+    res.json({
+        success:true,
+        name:req.body.name
+    });
+
+    console.log('removed');
+})
 
 
 
