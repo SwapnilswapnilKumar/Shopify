@@ -57,11 +57,13 @@ const storage = new CloudinaryStorage({
 // /creating upload end point for images
 const upload = multer({storage:storage});
 
-app.use('/images',express.static(uploadDir));
-app.post('/upload', upload.single('image'), async (req, res) => {
+// app.use('/images',express.static(uploadDir));
+
+
+app.post('/upload', upload.single('product'), async (req, res) => {
     try {
         // File uploaded to Cloudinary
-        const imageUrl = req.file.secure_url; // Cloudinary URL
+        const imageUrl = req.file.path;; // Cloudinary URL
 
         // Respond with the image URL
         res.json({
@@ -81,7 +83,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
 app.post('/addProduct',async (req,res)=>{
     let products = await Product.find({});
     let id=1;
-    if(product.length > 0){
+    if(products.length > 0){
         let lastProduct = products.slice(-1)[0];
         id = lastProduct.id + 1;
     }
