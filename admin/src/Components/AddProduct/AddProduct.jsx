@@ -16,6 +16,40 @@ const AddProduct = ()=>{
         old_price:""
     });
 
+
+    const addProduct = async ()=>{
+        console.log("inside addProduct fnction and add clicked");
+        let dataObj ;
+        let product = productDetails;
+
+        let formData = new FormData();
+        formData.append('product',image);
+
+        await fetch('https://shopify-1-bwde.onrender.com/upload',{
+            method:"POST",
+            headers:{
+                Accept:'application/json',
+            },
+            body:formData,
+        }).then((resp)=> resp.json())
+            .then((data)=>{dataObj = data});
+
+        if(dataObj.success){
+            product.image = dataObj.image_url;
+            await fetch('https://shopify-1-bwde.onrender.com/addProduct',{
+                method:"POST",
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify(product),
+            })
+                .then((resp)=> resp.json())
+                .then((data)=>{data.success ? alert("Product Added") : alert("Failed")});
+        
+        }
+    }
+
     const changeHandler = (e)=>{
         setProductDetails({ ...productDetails, [e.target.name]:e.target.value });
     }
@@ -69,7 +103,7 @@ const AddProduct = ()=>{
                 </label>
                 <input type="file" name="image" id='file-input' accept="image/*" hidden onChange={imageHandler} />
             </div>
-            <button  className='addproduct-btn' >ADD</button>
+            <button onClick={()=>{addProduct()}}  className='addproduct-btn' >ADD</button>
 
 
 
