@@ -16,25 +16,29 @@ app.use(cors());
 mongoose.connect('mongodb+srv://test_skt:ft53y4zPTeIRNydT@cluster0.xk1vxsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 
 // image storage
-const uploadDir = path.join(__dirname,'upload','images');
+// const uploadDir = path.join(__dirname,'upload','images');
+const uploadDir = '/tmp/images';
+
+
 const storage = multer.diskStorage({
     destination:(req,file,cb)=>{
         cb(null,uploadDir);
     },
     filename:(req,file,cb)=>{
-        return cb(null,`${file.filename}_${Date.now()}${path.extname(file.originalname)}`);
+        return cb(null, `${file.originalname.split('.')[0]}_${Date.now()}${path.extname(file.originalname)}`);
+
     }
 });
 
 // /creating upload end point for images
 const upload = multer({storage:storage});
 
-app.use('/images',express.static(uploadDir));
+// app.use('/images',express.static(uploadDir));
 app.post('/upload',upload.single('product'),(req,res)=>{
     
     res.json({
         success:1,
-        image_url:`https://shopify-1-bwde.onrender.com/images/${req.file.filename}`
+        image_url:`https://shopify-8ns5.onrender.com/images/${req.file.filename}`
     })
 })
 
