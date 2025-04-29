@@ -4,6 +4,10 @@ const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
 const multer = require('multer');
+
+const cloudinary = require('cloudinary').v2;
+const multerStorageCloudinary = require('multer-storage-cloudinary').StorageEngine;
+
 const cors = require('cors');
 const User = require('./config/UserModel');
 const Product = require('./config/ProductModel');
@@ -13,34 +17,61 @@ app.use(cors());
 
 
 //db connection
-mongoose.connect('mongodb+srv://test_skt:ft53y4zPTeIRNydT@cluster0.xk1vxsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect('mongodb+srv://test_skt:ft53y4zPTeIRNydT@cluster0.xk1vxsm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',{ useNewUrlParser: true, useUnifiedTopology: true })
+
 
 // image storage
-// const uploadDir = path.join(__dirname,'upload','images');
-const uploadDir = '/tmp/images';
+const uploadDir = path.join(__dirname,'upload','images');
 
 
-const storage = multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,uploadDir);
-    },
-    filename:(req,file,cb)=>{
-        return cb(null, `${file.originalname.split('.')[0]}_${Date.now()}${path.extname(file.originalname)}`);
 
-    }
+// const storage = multer.diskStorage({
+//     destination:(req,file,cb)=>{
+//         cb(null,uploadDir);
+//     },
+//     filename:(req,file,cb)=>{
+//         return cb(null, `${file.originalname.split('.')[0]}_${Date.now()}${path.extname(file.originalname)}`);
+
+//     }
+// });
+
+cloudinary.config({
+    cloud_name: "dp9sg9tgq",
+    api_key: "389315996691944",
+    api_secret:"y2JiAksF3iJV8TiqgdGdouU-hsY"
 });
+
+// Multer storage setup for Cloudinary
+const storage = new multerStorageCloudinary({
+    cloudinary: cloudinary,
+    folder: 'shopify/images', // Folder name in Cloudinary
+    allowedFormats: ['jpg', 'jpeg', 'png', 'gif'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }], // Optional transformations
+});
+
 
 // /creating upload end point for images
 const upload = multer({storage:storage});
 
-// app.use('/images',express.static(uploadDir));
-app.post('/upload',upload.single('product'),(req,res)=>{
-    
-    res.json({
-        success:1,
-        image_url:`https://shopify-8ns5.onrender.com/images/${req.file.filename}`
-    })
-})
+app.use('/images',express.static(uploadDir));
+app.post('/upload', upload.single('image'), async (req, res) => {
+    try {
+        // File uploaded to Cloudinary
+        const imageUrl = req.file.secure_url; // Cloudinary URL
+
+        // Respond with the image URL
+        res.json({
+            success: true,
+            image_url: imageUrl,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error uploading image to Cloudinary',
+            error: error.message,
+        });
+    }
+});
 
 
 app.post('/addProduct',async (req,res)=>{
